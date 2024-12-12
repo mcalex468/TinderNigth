@@ -1,0 +1,52 @@
+[
+    {
+      "nombre": "Juan",
+      "apellidos": "Pérez Gómez",
+      "ciudad": "Madrid",
+      "edad": 30,
+      "estado": "disponible"
+    },
+    {
+      "nombre": "María",
+      "apellidos": "López Fernández",
+      "ciudad": "Barcelona",
+      "edad": 25,
+      "estado": "no disponible"
+    },
+    {
+      "nombre": "Carlos",
+      "apellidos": "Martínez Rodríguez",
+      "ciudad": "Valencia",
+      "edad": 35,
+      "estado": "disponible"
+    },
+    {
+      "nombre": "Ana",
+      "apellidos": "García Sánchez",
+      "ciudad": "Sevilla",
+      "edad": 28,
+      "estado": "no disponible"
+    },
+    {
+      "nombre": "Luis",
+      "apellidos": "Hernández Ruiz",
+      "ciudad": "Zaragoza",
+      "edad": 40,
+      "estado": "disponible"
+    },
+    {
+      "nombre": "Elena",
+      "apellidos": "Torres Pérez",
+      "ciudad": "Bilbao",
+      "edad": 22,
+      "estado": "no disponible"
+    },
+    {
+      "nombre": "Miguel",
+      "apellidos": "Ramírez Ortiz",
+      "ciudad": "Málaga",
+      "edad": 33,
+      "estado": "disponible"
+    }
+  ]
+  
