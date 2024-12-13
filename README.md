@@ -126,10 +126,15 @@ const handleClick = () => {
 
 ## Resumen
 v-bind para enlazar atributos dinámicos.
+
 v-model para la vinculación bidireccional.
+
 v-for con :key para listas.
+
 v-if/v-else para mostrar/ocultar condicionalmente.
+
 v-show para ocultar un elemento sin sacarlo del DOM.
+
 @ o v-on para manejar eventos.
 
 ## Temas Específicos de Vue.js
@@ -139,12 +144,28 @@ v-show para ocultar un elemento sin sacarlo del DOM.
 
 ```vue
 <template>
-  <p>Hola, {{ mensaje }}!</p>
+  <div>
+    <p>Hola, {{ name }}!</p>
+    <button @click="notifyParent">Notificar al padre</button>
+  </div>
 </template>
 
 <script setup>
-defineProps(['mensaje']);
+import { defineProps, defineEmits } from 'vue';
+
+// Props recibidas del padre
+const props = defineProps({
+  name: String
+});
+
+// Emitir evento al padre
+const emit = defineEmits(['notify']);
+
+const notifyParent = () => {
+  emit('notify', 'El hijo envió un mensaje');
+};
 </script>
+
 ```
 
 ---
@@ -154,17 +175,28 @@ defineProps(['mensaje']);
 
 ```vue
 <template>
-  <button @click="enviar">Enviar</button>
+  <div>
+    <ChildComponent 
+      name="Mundo" 
+      @notify="handleNotification" 
+    />
+    <p>Mensaje del hijo: {{ messageFromChild }}</p>
+  </div>
 </template>
 
 <script setup>
-const emit = defineEmits(['miEvento']);
-function enviar() {
-  emit('miEvento', 'Hola desde el hijo');
-}
+import { ref } from 'vue';
+import ChildComponent from './ChildComponent.vue';
+
+// Estado para almacenar el mensaje del hijo
+const messageFromChild = ref('');
+
+// Manejar el evento 'notify' emitido por el hijo
+const handleNotification = (message) => {
+  messageFromChild.value = message;
+};
 </script>
 ```
-
 ---
 
 ### computed
