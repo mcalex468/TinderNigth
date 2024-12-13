@@ -140,47 +140,77 @@ v-show para ocultar un elemento sin sacarlo del DOM.
 ## Temas Específicos de Vue.js
 
 ### defineProps
-`defineProps` es una función de la API Composition que define las propiedades que un componente puede recibir desde su componente padre. Estas propiedades se usan para pasar datos al componente hijo.
+El `defineProps` es una función dEl component pare vol enviar el nomContacte al component fill, observa la sintaxi, afegim : nom (v-model) i a continuació la variable amb la informació a enviar.
 
+**(Padre)**
 ```vue
 <template>
   <div>
-    <p>Hola, {{ name }}!</p>
-    <button @click="notifyParent">Notificar al padre</button>
+    <ChildComponent 
+      :nom="nom"
+   />
+  
   </div>
 </template>
 
 <script setup>
-import { defineProps, defineEmits } from 'vue';
+import ContacteFill from './ContacteFill.vue';
+import { ref } from 'vue';
+const nom = ref('Define Props Pasando Datos');
 
-// Props recibidas del padre
+</script>
+```
+
+**(Hijo)**
+```vue
+<template>
+  <div>
+  <p>Prueba de: {{  }}</p>
+  </div>
+</template>
+
+<script setup>
+
 const props = defineProps({
-  name: String
+    nom: String, // La prop debe ser de tipo String
+    required: true, // Esta prop es obligatoria
 });
 
-// Emitir evento al padre
-const emit = defineEmits(['notify']);
+</script>
+```
+---
 
-const notifyParent = () => {
-  emit('notify', 'El hijo envió un mensaje');
+### defineEmits
+El `defineEmits` permite definir eventos personalizados que un componente hijo puede emitir hacia su componente padre. Esto es útil para comunicar acciones o datos hacia el componente que lo contiene.
+
+**(Hijo)**
+```vue
+<template>
+  <div>
+    <button @click="incremento">Incrementar</button>
+  </div>
+</template>
+
+<script setup>
+// Definir el evento que emitirá el hijo
+const emit = defineEmits(['incremento']);
+
+// Función para emitir el evento cuando se haga clic en el botón
+const incremento = () => {
+  emit('incremento');
 };
 </script>
 
 ```
 
----
-
-### defineEmits
-`defineEmits` permite definir eventos personalizados que un componente hijo puede emitir hacia su componente padre. Esto es útil para comunicar acciones o datos hacia el componente que lo contiene.
-
+**(Pare)**
 ```vue
 <template>
   <div>
-    <ChildComponent 
-      name="Mundo" 
-      @notify="handleNotification" 
-    />
-    <p>Mensaje del hijo: {{ messageFromChild }}</p>
+    <h1>Contador: {{ count }}</h1>
+    <!-- Escuchar el evento increment del componente hijo -->
+    <ChildComponent
+      @increment="increaseCount" />
   </div>
 </template>
 
@@ -188,14 +218,15 @@ const notifyParent = () => {
 import { ref } from 'vue';
 import ChildComponent from './ChildComponent.vue';
 
-// Estado para almacenar el mensaje del hijo
-const messageFromChild = ref('');
+// Crear una variable reactiva para el contador
+const count = ref(0);
 
-// Manejar el evento 'notify' emitido por el hijo
-const handleNotification = (message) => {
-  messageFromChild.value = message;
+// Función que incrementa el contador
+const increaseCount = () => {
+  count.value++;
 };
 </script>
+
 ```
 ---
 
