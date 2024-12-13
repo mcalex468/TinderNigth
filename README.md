@@ -1,58 +1,142 @@
-# Guía de Vue.js para el Examen
+# Guía de Vue.js
 
+## Creacion Projecto
+1. Comprobaciones :
+node -v         nmp -v
+
+2. Instal·lar node version manager NVM amb la següent instrucció
+
+curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.38.0/install.sh | bash  (tancar i obrir terminal)
+
+3. Instalar la versio que volem
+   nvm use 18 (exemple)
+
+4. Creacio Projecte
+   npm create vue@latest
+   Escollir tot el que volem afegir o implementar amb el projecte
+5. Obrir Web
+   cd nom carpeta
+   npm install
+   npm run dev
+   
 ## Conceptos Básicos de Vue.js
+
+ref(): Aquesta funció és ideal per fer reactius valors simples com números, cadenes de text o booleans. 
+reactive(): Aquesta funció és ideal per fer reactius objectes.
+
+## Directives
+Directives:  Són atributs especials que amb el prefix v-. Ens permeten aplicar actualitzacions de forma reactiva al DOM.
+
+El data binding es refereix a la vinculació automàtica entre les dades d'un component i la seva interfície d'usuari. 
+
+### v-bind
+Unidireccional (v-bind): Les dades flueixen en una direcció, des del model de dades cap a la interfície d'usuari.
+
+```vue
+<template>
+  <img v-bind:src="imageUrl" alt="Ejemplo de v-bind" />
+</template>
+
+<script setup>
+const imageUrl = 'https://via.placeholder.com/150';
+</script>
+```
+---
 
 ### v-model
 El `v-model` permite vincular el valor de un elemento del DOM (como un input, checkbox o select) con una propiedad del componente de forma bidireccional, lo que significa que cualquier cambio en el input actualiza la propiedad y viceversa.
 
-**Ejemplo:**
 ```vue
 <template>
-  <input v-model="nombre" placeholder="Escribe tu nombre" />
-  <p>Hola, {{ nombre }}!</p>
+  <input v-model="message" placeholder="Escribe algo" />
+  <p>Mensaje: {{ message }}</p>
 </template>
 
-<script>
-export default {
-  data() {
-    return {
-      nombre: '',
-    };
-  },
-};
+<script setup>
+import { ref } from 'vue';
+const message = ref('');
 </script>
 ```
+---
 
+### v-for + :key
+El `v-for` itera sobre una lista y genera elementos dinámicamente. El atributo :key asegura un renderizado eficiente.
+
+```vue
+<template>
+  <ul>
+    <li v-for="item in items" :key="item.id"></li>
+    <p>{{ item.name }}</p>
+  </ul>
+</template>
+
+<script setup>
+import items from './data.json'; // Importamos el JSON con los datos
+</script>
+
+```
+### v-if / v-else
+La directiva v-if s’utilitza per mostrar o ocultar elements segons una condició. 
+
+Si la condició és true, l'element es renderitza; si és false, l'element no es mostra al DOM
+```vue
+<template>
+  <p v-if="isLoggedIn">Bienvenido, usuario!</p>
+  <p v-else>Por favor, inicia sesión.</p>
+</template>
+
+<script setup>
+const isLoggedIn = false;
+</script>
+```
+---
+
+### v-show
+El `v-show` es fa servir per mostrar o ocultar un element de la plantilla, sols canvia la propietat display CSS de l’element. En termes generals v-if té costos d’alternança més alts mentre que v-show té costos de renderització més alts.
+
+```vue
+<template>
+  <p v-show="isVisible">Este texto puede mostrarse u ocultarse.</p>
+  <button @click="isVisible = !isVisible">Toggle Visibilidad</button>
+</template>
+
+<script setup>
+import { ref } from 'vue';
+const isVisible = ref(true);
+</script>
+```
 ---
 
 ### v-on
 El `v-on` se usa para agregar escuchadores de eventos a los elementos del DOM, como clics, envíos de formularios, entre otros. Su abreviación es `@`.
 
-**Ejemplo:**
 ```vue
 <template>
-  <button @click="saludar">Haz clic</button>
+  <button @click="handleClick">Haz clic aquí</button>
 </template>
 
-<script>
-export default {
-  methods: {
-    saludar() {
-      alert('¡Hola!');
-    },
-  },
+<script setup>
+const handleClick = () => {
+  alert('¡Botón clickeado!');
 };
 </script>
-```
 
+```
 ---
+
+## Resumen
+v-bind para enlazar atributos dinámicos.
+v-model para la vinculación bidireccional.
+v-for con :key para listas.
+v-if/v-else para mostrar/ocultar condicionalmente.
+v-show para ocultar un elemento sin sacarlo del DOM.
+@ o v-on para manejar eventos.
 
 ## Temas Específicos de Vue.js
 
 ### defineProps
 `defineProps` es una función de la API Composition que define las propiedades que un componente puede recibir desde su componente padre. Estas propiedades se usan para pasar datos al componente hijo.
 
-**Ejemplo:**
 ```vue
 <template>
   <p>Hola, {{ mensaje }}!</p>
@@ -68,7 +152,6 @@ defineProps(['mensaje']);
 ### defineEmits
 `defineEmits` permite definir eventos personalizados que un componente hijo puede emitir hacia su componente padre. Esto es útil para comunicar acciones o datos hacia el componente que lo contiene.
 
-**Ejemplo:**
 ```vue
 <template>
   <button @click="enviar">Enviar</button>
@@ -87,7 +170,6 @@ function enviar() {
 ### computed
 Las propiedades computadas (`computed`) son funciones que devuelven valores derivados de las propiedades del estado reactivo. Se recalculan automáticamente cuando cambian las propiedades dependientes.
 
-**Ejemplo:**
 ```vue
 <template>
   <p>Mensaje: {{ mensajeEnMayusculas }}</p>
@@ -114,7 +196,7 @@ export default {
 ### provide / inject
 `provide` e `inject` son herramientas de Vue que permiten compartir datos entre un componente padre y sus descendientes, sin necesidad de pasar propiedades directamente a través de cada componente intermedio.
 
-**Ejemplo (Padre):**
+**(Padre):**
 ```vue
 <template>
   <Hijo />
@@ -132,7 +214,7 @@ export default {
 </script>
 ```
 
-**Ejemplo (Hijo):**
+**(Hijo)**
 ```vue
 <template>
   <p>{{ mensaje }}</p>
@@ -155,7 +237,6 @@ export default {
 ### Conectarse a un JSON
 Para consumir un archivo JSON local en Vue.js, puedes importarlo directamente como un módulo de JavaScript.
 
-**Ejemplo:**
 ```vue
 <template>
   <div v-for="usuario in usuarios" :key="usuario.id">
@@ -181,7 +262,6 @@ export default {
 ### router-link
 `router-link` es un componente de Vue Router que permite crear enlaces de navegación entre diferentes rutas de la aplicación, de forma declarativa y con soporte para transiciones y estilos activos.
 
-**Ejemplo:**
 ```vue
 <template>
   <div>
@@ -196,7 +276,6 @@ export default {
 ### router-view
 `router-view` es un componente utilizado para renderizar el contenido de la ruta actual. Es donde las vistas asociadas a las rutas definidas se insertan dinámicamente.
 
-**Ejemplo:**
 ```vue
 <template>
   <router-view />
@@ -204,17 +283,6 @@ export default {
 ```
 
 ---
-
-## Menú de Navegación
-
-### Menú en Markdown
-```markdown
-# Menú de Navegación
-
-- [Inicio](#inicio)
-- [Acerca de](#acerca-de)
-- [Contacto](#contacto)
-```
 
 ### Menú con Vue Router
 ```vue
